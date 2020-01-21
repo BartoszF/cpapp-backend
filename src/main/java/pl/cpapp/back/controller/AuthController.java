@@ -1,17 +1,16 @@
 package pl.cpapp.back.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.cpapp.back.data.request.LoginRequest;
 import pl.cpapp.back.data.response.JwtAuthenticationResponse;
 import pl.cpapp.back.repository.UserRepository;
@@ -19,10 +18,9 @@ import pl.cpapp.back.security.JwtTokenProvider;
 import pl.cpapp.back.service.UserService;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -42,12 +40,17 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getNumber(),
-                        loginRequest.getPin()
-                )
-        );
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getNumber(),
+                            loginRequest.getPin()
+                    )
+            );
+        } catch (AuthenticationException ex) {
+            return ResponseEntity.notFound().build();
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

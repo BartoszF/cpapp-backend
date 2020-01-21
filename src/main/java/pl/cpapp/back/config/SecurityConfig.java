@@ -2,7 +2,6 @@ package pl.cpapp.back.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -78,13 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                 .permitAll()
-                .antMatchers("/**", "/")
-                .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/users/**", "/api/players/**")
-                .permitAll()
                 .antMatchers("/ws/**")
-                .permitAll()
-                .antMatchers("/public/**")
                 .permitAll()
                 .antMatchers("/api/**")
                 .authenticated()
