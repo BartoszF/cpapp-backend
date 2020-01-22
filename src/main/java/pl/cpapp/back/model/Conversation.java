@@ -1,6 +1,8 @@
 package pl.cpapp.back.model;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import java.util.List;
 @Table(name = "conversations")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
 public class Conversation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

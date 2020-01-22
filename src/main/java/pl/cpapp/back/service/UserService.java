@@ -35,4 +35,8 @@ public class UserService {
 
         return userRepository.getOne(user.getId());
     }
+
+    public User getById(Long id) {
+        return userRepository.getOne(id);
+    }
 }
