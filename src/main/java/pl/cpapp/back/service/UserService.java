@@ -8,6 +8,10 @@ import pl.cpapp.back.model.User;
 import pl.cpapp.back.repository.RoleRepository;
 import pl.cpapp.back.repository.UserRepository;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -38,5 +42,14 @@ public class UserService {
 
     public User getById(Long id) {
         return userRepository.getOne(id);
+    }
+
+    public Optional<User> addContact(User currentUser, String contactNumber) {
+        User contactUser = userRepository.findByNumber(contactNumber).orElseThrow(EntityNotFoundException::new);
+        List<User> contacts = currentUser.getContacts();
+        contacts.add(contactUser);
+        currentUser.setContacts(contacts);
+
+        return Optional.of(userRepository.save(currentUser));
     }
 }

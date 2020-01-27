@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "users")
@@ -41,6 +40,20 @@ public class User {
 
     @OneToMany(mappedBy = "userB")
     private List<Conversation> conversationsB;
+
+    @ManyToMany
+    @JoinTable(name = "contacts",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "contact_id")
+    )
+    private List<User> contacts;
+
+    @ManyToMany
+    @JoinTable(name = "contacts",
+            joinColumns = @JoinColumn(name = "contact_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> contactOf;
 
     public List<Conversation> getConversations() {
         List<Conversation> joined = new ArrayList<>(conversationsA);
