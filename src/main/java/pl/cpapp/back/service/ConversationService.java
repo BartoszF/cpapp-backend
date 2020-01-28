@@ -8,6 +8,8 @@ import pl.cpapp.back.repository.ConversationRepository;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ConversationService {
@@ -29,11 +31,16 @@ public class ConversationService {
         conversation.setUserB(userB);
         conversation.setCreationDate(Timestamp.from(Instant.now()));
         conversation.setModificationDate(Timestamp.from(Instant.now()));
+        conversation.setMessages(new ArrayList<>());
 
         return conversationRepository.save(conversation);
     }
 
     public Conversation getById(Long id) {
         return conversationRepository.getOne(id);
+    }
+
+    public List<Conversation> getAll() {
+        return conversationRepository.findAll();
     }
 }

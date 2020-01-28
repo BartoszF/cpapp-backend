@@ -11,7 +11,9 @@ import pl.cpapp.back.security.UserPrincipal;
 import pl.cpapp.back.service.ConversationService;
 import pl.cpapp.back.service.MessageService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/conversation")
@@ -38,5 +40,10 @@ public class ConversationController {
     @PostMapping("/{id}/message")
     public ResponseEntity<Optional<MessageResponse>> createMessage(@CurrentUser UserPrincipal currentUser, @RequestBody MessageRequest message, @PathVariable("id") Long id) {
         return ResponseEntity.ok(MessageResponse.from(Optional.of(messageService.create(message, currentUser, id))));
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<ConversationResponse>> getAll() {
+        return ResponseEntity.ok(conversationService.getAll().stream().map(c -> ConversationResponse.from(c).get()).collect(Collectors.toList()));
     }
 }

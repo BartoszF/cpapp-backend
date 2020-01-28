@@ -10,6 +10,7 @@ import pl.cpapp.back.repository.RoleRepository;
 import pl.cpapp.back.repository.UserRepository;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,7 @@ public class UserService {
     }
 
     public User createUser(AdminUserRequest request) {
+
         User user = new User();
 
         user.setName(request.getName());
@@ -63,7 +65,18 @@ public class UserService {
         user.setNumber(request.getPhoneNumber());
         user.setPin(passwordEncoder.encode(request.getPin()));
         user.setDescription(user.getDescription());
+        user.setContacts(new ArrayList<>());
+        user.setConversationsA(new ArrayList<>());
+        user.setConversationsB(new ArrayList<>());
 
-        return userRepository.save(user);
+        user = userRepository.save(user);
+
+        Role role = new Role();
+        role.setRole("USER");
+        role.setUser(user);
+
+        user.setRole(roleRepository.save(role));
+
+        return userRepository.findById(user.getId()).orElseThrow();
     }
 }
