@@ -11,6 +11,8 @@ import pl.cpapp.back.security.UserPrincipal;
 import pl.cpapp.back.service.ConversationService;
 import pl.cpapp.back.service.MessageService;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/conversation")
 public class ConversationController {
@@ -34,7 +36,7 @@ public class ConversationController {
     }
 
     @PostMapping("/{id}/message")
-    public ResponseEntity<MessageResponse> createMessage(@CurrentUser UserPrincipal currentUser, @RequestBody MessageRequest message, @PathVariable("id") Long id) {
-        return ResponseEntity.ok(MessageResponse.from(messageService.create(message, currentUser, id)));
+    public ResponseEntity<Optional<MessageResponse>> createMessage(@CurrentUser UserPrincipal currentUser, @RequestBody MessageRequest message, @PathVariable("id") Long id) {
+        return ResponseEntity.ok(MessageResponse.from(Optional.of(messageService.create(message, currentUser, id))));
     }
 }

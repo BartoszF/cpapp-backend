@@ -3,6 +3,7 @@ package pl.cpapp.back.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.cpapp.back.data.request.AdminUserRequest;
 import pl.cpapp.back.data.request.ContactRequest;
 import pl.cpapp.back.data.response.ConversationResponse;
 import pl.cpapp.back.data.response.UserResponse;
@@ -41,6 +42,11 @@ public class UserController {
         return ResponseEntity.ok(userRepository.findAll().stream().map(user -> UserResponse.from(user)).collect(Collectors.toList()));
     }
 
+    @PostMapping("/")
+    public ResponseEntity<UserResponse> createUser(@RequestBody AdminUserRequest request) {
+        return ResponseEntity.ok(UserResponse.from(userService.createUser(request)));
+    }
+
     @GetMapping("/me/conversations")
     public ResponseEntity<List<ConversationResponse>> getUserConversations(@CurrentUser UserPrincipal currentUser) {
         User user = userRepository.getOne(currentUser.getId());
@@ -54,6 +60,5 @@ public class UserController {
         User user = userRepository.getOne(currentUser.getId());
 
         return ResponseEntity.of(userService.addContact(user, body.getContactNumber()));
-
     }
 }

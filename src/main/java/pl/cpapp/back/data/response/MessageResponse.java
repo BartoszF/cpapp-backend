@@ -4,6 +4,7 @@ import lombok.*;
 import pl.cpapp.back.model.Message;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -17,7 +18,11 @@ public class MessageResponse {
     private String text;
     private Timestamp date;
 
-    public static MessageResponse from(Message message) {
-        return builder().id(message.getId()).senderId(message.getSender().getId()).conversationId(message.getConversation().getId()).text(message.getText()).date(message.getDate()).build();
+    public static Optional<MessageResponse> from(Optional<Message> message) {
+        if (message.isPresent()) {
+            Message msg = message.get();
+            return Optional.of(builder().id(msg.getId()).senderId(msg.getSender().getId()).conversationId(msg.getConversation().getId()).text(msg.getText()).date(msg.getDate()).build());
+        }
+        return Optional.empty();
     }
 }

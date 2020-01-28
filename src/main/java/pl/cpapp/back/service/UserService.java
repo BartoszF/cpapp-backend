@@ -3,6 +3,7 @@ package pl.cpapp.back.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.cpapp.back.data.request.AdminUserRequest;
 import pl.cpapp.back.model.Role;
 import pl.cpapp.back.model.User;
 import pl.cpapp.back.repository.RoleRepository;
@@ -51,5 +52,18 @@ public class UserService {
         currentUser.setContacts(contacts);
 
         return Optional.of(userRepository.save(currentUser));
+    }
+
+    public User createUser(AdminUserRequest request) {
+        User user = new User();
+
+        user.setName(request.getName());
+        user.setSurename(request.getSurename());
+        user.setPseudo(request.getPseudo());
+        user.setNumber(request.getPhoneNumber());
+        user.setPin(passwordEncoder.encode(request.getPin()));
+        user.setDescription(user.getDescription());
+
+        return userRepository.save(user);
     }
 }
